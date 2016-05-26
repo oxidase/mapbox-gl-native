@@ -140,7 +140,7 @@ public:
     void removeAnnotationIcon(const std::string&);
     double getTopOffsetPixelsForAnnotationIcon(const std::string&);
 
-    AnnotationIDs addAnnotations(const std::vector<Annotation>&);
+    AnnotationID addAnnotation(const Geometry<double>&, const AnnotationProperties&);
     void updatePointAnnotation(AnnotationID, const PointAnnotation&);
     void removeAnnotations(const AnnotationIDs&);
 

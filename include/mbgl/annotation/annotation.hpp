@@ -14,39 +14,35 @@ namespace mbgl {
 using AnnotationID = uint32_t;
 using AnnotationIDs = std::vector<AnnotationID>;
 
-class PointAnnotation {
+class PointAnnotationProperties {
 public:
-    Point<double> geometry;
     std::string icon;
 };
 
-class LineAnnotation {
+class LineAnnotationProperties {
 public:
-    Line<double> geometry;
     float opacity = 1;
     float width = 1;
     Color color = {{ 0, 0, 0, 1 }};
 };
 
-class PolygonAnnotation {
+class PolygonAnnotationProperties {
 public:
-    Polygon<double> geometry;
     float opacity = 1;
     Color color = {{ 0, 0, 0, 1 }};
     Color outlineColor = {{ 0, 0, 0, -1 }};
 };
 
 // An annotation whose type and properties are sourced from a style layer.
-struct StyleSourcedAnnotation {
-    Geometry<double> geometry;
+struct StyleSourcedAnnotationProperties {
     std::string layerID;
 };
 
-using Annotation = variant<
-    PointAnnotation,
-    LineAnnotation,
-    PolygonAnnotation,
-    StyleSourcedAnnotation>;
+using AnnotationProperties = variant<
+    PointAnnotationProperties,
+    LineAnnotationProperties,
+    PolygonAnnotationProperties,
+    StyleSourcedAnnotationProperties>;
 
 //    AnnotationSegments wrapCoordinates(const AnnotationSegments& segments_) {
 //        AnnotationSegments wrappedSegments;
