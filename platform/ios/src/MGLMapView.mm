@@ -41,6 +41,7 @@
 #import "MGLAnnotationView_Private.h"
 #import "MGLMapboxEvents.h"
 #import "MGLCompactCalloutView.h"
+#import "MGLAnnotationContainerView.h"
 
 #import <algorithm>
 #import <cstdlib>
@@ -233,6 +234,7 @@ public:
 @property (nonatomic, getter=isDormant) BOOL dormant;
 @property (nonatomic, readonly, getter=isRotationAllowed) BOOL rotationAllowed;
 @property (nonatomic) MGLMapViewProxyAccessibilityElement *mapViewProxyAccessibilityElement;
+@property (nonatomic) MGLAnnotationContainerView *annotationContainerView;
 
 @end
 
@@ -548,7 +550,6 @@ mbgl::Duration MGLDurationInSeconds(NSTimeInterval duration)
     _glView.delegate = self;
     [_glView bindDrawable];
     [self insertSubview:_glView atIndex:0];
-
     _glView.contentMode = UIViewContentModeCenter;
 
     // load extensions
@@ -2805,6 +2806,8 @@ mbgl::Duration MGLDurationInSeconds(NSTimeInterval duration)
 
     BOOL delegateImplementsViewForAnnotation = [self.delegate respondsToSelector:@selector(mapView:viewForAnnotation:)];
     BOOL delegateImplementsImageForPoint = [self.delegate respondsToSelector:@selector(mapView:imageForAnnotation:)];
+    
+    NSMutableArray *newAnnotationViews = [NSMutableArray array];
 
     for (id <MGLAnnotation> annotation in annotations)
     {
@@ -2839,7 +2842,7 @@ mbgl::Duration MGLDurationInSeconds(NSTimeInterval duration)
                 {
                     annotationViewsForAnnotation[annotationValue] = annotationView;
                     annotationView.center = [self convertCoordinate:annotation.coordinate toPointToView:self];
-                    [self.glView addSubview:annotationView];
+                    [newAnnotationViews addObject:annotationView];
                 }
             }
             
@@ -2926,6 +2929,23 @@ mbgl::Duration MGLDurationInSeconds(NSTimeInterval duration)
             _annotationContextsByAnnotationTag[annotationTag] = context;
         }
     }
+   
+   
+    MGLAnnotationContainerView *newAnnotationContainerView;
+    if (self.annotationContainerView)
+    {
+        // reload any previously added views
+        newAnnotationContainerView = [MGLAnnotationContainerView annotationContainerViewWithAnnotationContainerView:self.annotationContainerView];
+        [self.annotationContainerView removeFromSuperview];
+    }
+    else
+    {
+        newAnnotationContainerView = [[MGLAnnotationContainerView alloc] initWithFrame:self.bounds];
+    }
+    newAnnotationContainerView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    [newAnnotationContainerView addSubviews:newAnnotationViews];
+    [_glView insertSubview:newAnnotationContainerView atIndex:0];
+    self.annotationContainerView = newAnnotationContainerView;
     
     [self didChangeValueForKey:@"annotations"];
     UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, nil);
