@@ -694,33 +694,15 @@ double Map::getTopOffsetPixelsForAnnotationIcon(const std::string& name) {
     return impl->annotationManager->getTopOffsetPixelsForIcon(name);
 }
 
-AnnotationID Map::addPointAnnotation(const PointAnnotation& annotation) {
-    return addPointAnnotations({ annotation }).front();
-}
-
-AnnotationIDs Map::addPointAnnotations(const std::vector<PointAnnotation>& annotations) {
-    auto result = impl->annotationManager->addPointAnnotations(annotations, getMaxZoom());
+AnnotationIDs Map::addAnnotations(const std::vector<Annotation>& annotations) {
+    auto result = impl->annotationManager->addAnnotations(annotations, getMaxZoom());
     update(Update::Annotations);
     return result;
 }
 
-AnnotationID Map::addShapeAnnotation(const ShapeAnnotation& annotation) {
-    return addShapeAnnotations({ annotation }).front();
-}
-
-AnnotationIDs Map::addShapeAnnotations(const std::vector<ShapeAnnotation>& annotations) {
-    auto result = impl->annotationManager->addShapeAnnotations(annotations, getMaxZoom());
-    update(Update::Annotations);
-    return result;
-}
-
-void Map::updatePointAnnotation(AnnotationID annotationId, const PointAnnotation& annotation) {
+void Map::updateAnnotation(AnnotationID annotationId, const PointAnnotation& annotation) {
     impl->annotationManager->updatePointAnnotation(annotationId, annotation, getMaxZoom());
     update(Update::Annotations);
-}
-
-void Map::removeAnnotation(AnnotationID annotation) {
-    removeAnnotations({ annotation });
 }
 
 void Map::removeAnnotations(const AnnotationIDs& annotations) {

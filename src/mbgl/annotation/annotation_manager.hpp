@@ -25,8 +25,7 @@ public:
     AnnotationManager(float pixelRatio);
     ~AnnotationManager();
 
-    AnnotationIDs addPointAnnotations(const std::vector<PointAnnotation>&, const uint8_t maxZoom);
-    AnnotationIDs addShapeAnnotations(const std::vector<ShapeAnnotation>&, const uint8_t maxZoom);
+    AnnotationIDs addAnnotations(const std::vector<Annotation>&, const uint8_t maxZoom);
     void updatePointAnnotation(const AnnotationID&, const PointAnnotation&, const uint8_t maxZoom);
     void removeAnnotations(const AnnotationIDs&);
 
