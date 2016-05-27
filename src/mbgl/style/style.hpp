@@ -120,7 +120,7 @@ private:
     void onSourceError(Source&, std::exception_ptr) override;
     void onTileLoaded(Source&, const OverscaledTileID&, bool isNewTile) override;
     void onTileError(Source&, const OverscaledTileID&, std::exception_ptr) override;
-    void onPlacementRedone() override;
+    void onNeedsRepaint() override;
 
     StyleObserver* observer = nullptr;
 

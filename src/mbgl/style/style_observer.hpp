@@ -14,9 +14,9 @@ public:
      * In addition to the individual glyph, sprite, and source events, the
      * following "rollup" events are provided for convenience. They are
      * strictly additive; e.g. when a source is loaded, both `onSourceLoaded`
-     * and `onResourceLoaded` will be called.
+     * and `onNeedsRepaint` will be called.
      */
-    virtual void onResourceLoaded() {}
+    virtual void onNeedsRepaint() {}
     virtual void onResourceError(std::exception_ptr) {}
 };
 
